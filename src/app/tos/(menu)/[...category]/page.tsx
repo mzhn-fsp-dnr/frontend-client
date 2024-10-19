@@ -17,12 +17,12 @@ export interface PageParams {
 
 export default function Page({ params }: PageParams) {
   const searchParams = useSearchParams();
-  const categoryId = parseInt(params.category[0]);
+  const categoryPath = params.category;
 
   const { isLoading, isError, data } = useQuery({
-    queryKey: ["category", categoryId],
-    queryFn: () => getCategory(categoryId),
-    placeholderData: { id: -1, name: "", children: [], parent: null },
+    queryKey: ["category", categoryPath[categoryPath.length - 1]],
+    queryFn: () => getCategory(categoryPath),
+    placeholderData: { id: "", name: "", children: [], parent: null },
   });
 
   const page = useMemo(
@@ -30,6 +30,10 @@ export default function Page({ params }: PageParams) {
     [searchParams]
   );
   const paginated = usePagination(data?.children!, page, 4);
+  const prevS = useMemo(
+    () => categoryPath.slice(0, categoryPath.length - 1).join("/"),
+    []
+  );
 
   if (isError) return <>error</>;
   if (isLoading) return <>loading</>;
@@ -43,12 +47,13 @@ export default function Page({ params }: PageParams) {
       </div>
       <CategoryTable
         items={paginated.items}
+        prev={categoryPath}
         href_forward={paginated.hasNext ? `?page=${page + 1}` : undefined}
         href_back={paginated.hasBack ? `?page=${page - 1}` : undefined}
       />
       <div className="mt-auto flex justify-center gap-2">
         <Button asChild>
-          <Link href={`/tos/${data?.parent?.id ?? ""}`}>Назад</Link>
+          <Link href={`/tos/${prevS}/${data?.parent?.id ?? ""}`}>Назад</Link>
         </Button>
       </div>
     </section>

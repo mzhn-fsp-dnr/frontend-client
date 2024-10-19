@@ -21,7 +21,7 @@ export default function Page() {
     () => parseInt(searchParams.get("page") ?? "1"),
     [searchParams]
   );
-  const paginated = usePagination(data!, page, 4);
+  const paginated = usePagination(data ?? [], page, 4);
 
   if (isError) return <>error</>;
   if (isLoading) return <>loading</>;
