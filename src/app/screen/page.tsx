@@ -3,6 +3,7 @@
 import Image from "next/image";
 
 import { get } from "@/api/queue";
+import { byId } from "@/api/windows";
 import logo from "@/app/assets/images/logo.png";
 import {
   Table,
@@ -13,7 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import CurrentTime from "@/components/util/current-time";
-import { useQuery } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import OrgName from "./components/org-name";
 
 export default function Page() {
@@ -23,10 +24,21 @@ export default function Page() {
     refetchInterval: 5000,
   });
 
+  const ids = data?.map((d) => d.window).filter((d) => d !== null);
+  const queries = useQueries({
+    queries: ids
+      ? ids.map((id) => ({
+          queryKey: ["window", id],
+          queryFn: () => byId(id),
+          enabled: !!ids,
+        }))
+      : [],
+  });
+
   if (isError) return <>error</>;
   if (isLoading) return <>loading</>;
 
-  const ticketsWithWindow = data?.filter((d) => d.windows !== null);
+  const ticketsWithWindow = data?.filter((d) => d.window !== null);
 
   return (
     <div className="flex h-full flex-col gap-6 py-8">
@@ -63,19 +75,25 @@ export default function Page() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {ticketsWithWindow?.slice(0, 5).map((t) => (
-                <TableRow>
-                  <TableCell className="p-6 text-center text-3xl font-bold text-black">
-                    {t.ticket_code}
-                  </TableCell>
-                  <TableCell className="p-6 text-center text-3xl font-bold text-black">
-                    &gt;
-                  </TableCell>
-                  <TableCell className="p-6 text-center text-3xl font-bold text-black">
-                    {t.windows?.name}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {ticketsWithWindow?.slice(0, 5).map((t, i) => {
+                const item = queries[i];
+                if (item.isLoading) return <></>;
+                if (item.isError) return <></>;
+
+                return (
+                  <TableRow key={i}>
+                    <TableCell className="p-6 text-center text-3xl font-bold text-black">
+                      {t.ticket_code}
+                    </TableCell>
+                    <TableCell className="p-6 text-center text-3xl font-bold text-black">
+                      &gt;
+                    </TableCell>
+                    <TableCell className="p-6 text-center text-3xl font-bold text-black">
+                      {item.data?.name}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </div>
@@ -93,19 +111,25 @@ export default function Page() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {ticketsWithWindow?.slice(5, 10).map((t) => (
-                <TableRow>
-                  <TableCell className="p-6 text-center text-3xl font-bold text-black">
-                    {t.ticket_code}
-                  </TableCell>
-                  <TableCell className="p-6 text-center text-3xl font-bold text-black">
-                    &gt;
-                  </TableCell>
-                  <TableCell className="p-6 text-center text-3xl font-bold text-black">
-                    {t.windows?.name}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {ticketsWithWindow?.slice(5, 10).map((t, i) => {
+                const item = queries[i];
+                if (item.isLoading) return <></>;
+                if (item.isError) return <></>;
+
+                return (
+                  <TableRow key={i}>
+                    <TableCell className="p-6 text-center text-3xl font-bold text-black">
+                      {t.ticket_code}
+                    </TableCell>
+                    <TableCell className="p-6 text-center text-3xl font-bold text-black">
+                      &gt;
+                    </TableCell>
+                    <TableCell className="p-6 text-center text-3xl font-bold text-black">
+                      {item.data?.name}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </div>
