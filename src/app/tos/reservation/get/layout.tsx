@@ -6,11 +6,11 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="flex h-screen flex-col p-4">
+    <main className="flex h-screen flex-col">
       <Header className="border-b-2 border-cyan-700 pb-4 text-cyan-700">
         Введите код брони
       </Header>
-      {children}
+      <div className="flex h-full flex-col p-4">{children}</div>
     </main>
   );
 }

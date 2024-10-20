@@ -39,8 +39,8 @@ export default function Page({ params }: PageParams) {
   if (isLoading) return <>loading</>;
 
   return (
-    <section className="flex h-full flex-col gap-4 py-8">
-      <div className="text-cyan-700">
+    <section className="flex h-full flex-col gap-4 py-4">
+      <div className="text-blue-500">
         <h2 className="scroll-m-20 pb-2 text-center text-3xl font-semibold first:mt-0">
           Категория: {data!.name}
         </h2>

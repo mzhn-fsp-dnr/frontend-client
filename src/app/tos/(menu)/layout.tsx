@@ -6,11 +6,11 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="flex h-screen flex-col p-4">
-      <Header className="border-b-2 border-cyan-700 pb-4 text-cyan-700">
-        Выберите нужную услугу:
+    <main className="flex h-screen flex-col">
+      <Header className="border-b-2 border-gray-200 pb-4 text-blue-500">
+        Выберите нужную услугу
       </Header>
-      {children}
+      <div className="flex h-full flex-col p-4">{children}</div>
     </main>
   );
 }
