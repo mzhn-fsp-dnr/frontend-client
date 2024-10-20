@@ -23,3 +23,8 @@ export async function create(service_id: string) {
     })
   ).data as { message: string; item: Ticket };
 }
+
+export async function get(): Promise<Ticket[]> {
+  const org_id = process.env.NEXT_PUBLIC_ORG_ID;
+  return (await client.get(`/queue/department/${org_id}/queue/current`)).data;
+}

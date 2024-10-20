@@ -65,6 +65,9 @@ const config: Config = {
       animation: {
         "caret-blink": "caret-blink 1.25s ease-out infinite",
       },
+      backgroundImage: {
+        "post-bg": "url('/bg.jpg')",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],
