@@ -1,5 +1,6 @@
 "use client";
 
+import { prereg } from "@/api/queue";
 import {
   InputOTP,
   InputOTPGroup,
@@ -8,6 +9,7 @@ import {
 import { cn } from "@/lib/utils";
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Keyboard from "react-simple-keyboard";
 import "react-simple-keyboard/build/css/index.css";
@@ -16,6 +18,14 @@ import Button from "../../components/button";
 export default function Page() {
   const [value, setValue] = useState("");
   const [keyboard, setKeyboardVisible] = useState(false);
+  const router = useRouter();
+
+  const doPrereg = async () => {
+    const result = (await prereg(value)).item;
+    router.replace(
+      `/tos/ticket?ticket=${result.ticket_code}&date=${result.creation_time}`
+    );
+  };
 
   return (
     <section className="flex h-full flex-col items-center gap-4 py-8">
@@ -58,7 +68,11 @@ export default function Page() {
         </div>
         {!keyboard && (
           <>
-            <Button className="grow" disabled={value.length < 7}>
+            <Button
+              className="grow"
+              disabled={value.length < 7}
+              onClick={async () => await doPrereg()}
+            >
               Выдать талон
             </Button>
             <Button className="grow" asChild>
