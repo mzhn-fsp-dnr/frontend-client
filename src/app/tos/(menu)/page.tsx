@@ -37,7 +37,9 @@ export default function Page() {
         <Button asChild>
           <Link href="/tos/reservation/get">Предварительная запись</Link>
         </Button>
-        <Button>Регистрация Telegram</Button>
+        <Button>
+          <Link href="/tos/tg">Регистрация Telegram</Link>
+        </Button>
       </div>
     </section>
   );
