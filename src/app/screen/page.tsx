@@ -38,6 +38,7 @@ export default function Page() {
   if (isError) return <>error</>;
   if (isLoading) return <>loading</>;
 
+  const ticketsWithoutWindow = data?.filter((d) => d.window === null);
   const ticketsWithWindow = data?.filter((d) => d.window !== null);
 
   return (
@@ -60,42 +61,22 @@ export default function Page() {
           />
         </div>
       </div>
-      <div className="grid h-full grid-cols-2 gap-2">
+      <div className="grid h-full grid-cols-[1fr_2fr] gap-2">
         <div>
-          <Table>
-            <TableHeader className="bg-blue-500">
-              <TableRow>
-                <TableHead className="p-6 text-center text-3xl font-bold text-white">
-                  Клиент
-                </TableHead>
-                <TableHead></TableHead>
-                <TableHead className="text-center text-3xl font-bold text-white">
-                  Окошко
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {ticketsWithWindow?.slice(0, 5).map((t, i) => {
-                const item = queries[i];
-                if (item.isLoading) return <></>;
-                if (item.isError) return <></>;
-
+          <div className="flex flex-col">
+            <div className="bg-blue-500 p-6 text-center text-3xl font-bold text-white">
+              Ожидание
+            </div>
+            <div className="grid grid-cols-2">
+              {ticketsWithoutWindow?.slice(0, 10).map((t, i) => {
                 return (
-                  <TableRow key={i}>
-                    <TableCell className="p-6 text-center text-3xl font-bold text-black">
-                      {t.ticket_code}
-                    </TableCell>
-                    <TableCell className="p-6 text-center text-3xl font-bold text-black">
-                      &gt;
-                    </TableCell>
-                    <TableCell className="p-6 text-center text-3xl font-bold text-black">
-                      {item.data?.name}
-                    </TableCell>
-                  </TableRow>
+                  <div className="p-6 text-center text-2xl font-bold text-black">
+                    {t.ticket_code}
+                  </div>
                 );
               })}
-            </TableBody>
-          </Table>
+            </div>
+          </div>
         </div>
         <div>
           <Table>
@@ -111,7 +92,7 @@ export default function Page() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {ticketsWithWindow?.slice(5, 10).map((t, i) => {
+              {ticketsWithWindow?.slice(0, 5).map((t, i) => {
                 const item = queries[i];
                 if (item.isLoading) return <></>;
                 if (item.isError) return <></>;
