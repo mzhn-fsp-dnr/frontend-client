@@ -8,9 +8,10 @@ export interface Category {
 }
 
 export async function all(): Promise<Category[]> {
+  const org_id = process.env.NEXT_PUBLIC_ORG_ID;
   return await (
-    await client.get("/services/services/")
-  ).data;
+    await client.get(`/offices/offices/${org_id}`)
+  ).data.services;
 }
 
 export async function getCategory(ids: string[]): Promise<Category> {

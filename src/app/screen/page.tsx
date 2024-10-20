@@ -26,7 +26,7 @@ export default function Page() {
   if (isError) return <>error</>;
   if (isLoading) return <>loading</>;
 
-  const ticketsWithWindow = data?.filter((d) => d.window == null);
+  const ticketsWithWindow = data?.filter((d) => d.windows !== null);
 
   return (
     <div className="flex h-full flex-col gap-6 py-8">
@@ -72,7 +72,7 @@ export default function Page() {
                     &gt;
                   </TableCell>
                   <TableCell className="p-6 text-center text-3xl font-bold text-black">
-                    {t.window}
+                    {t.windows?.name}
                   </TableCell>
                 </TableRow>
               ))}
@@ -102,7 +102,7 @@ export default function Page() {
                     &gt;
                   </TableCell>
                   <TableCell className="p-6 text-center text-3xl font-bold text-black">
-                    {t.window}
+                    {t.windows?.name}
                   </TableCell>
                 </TableRow>
               ))}

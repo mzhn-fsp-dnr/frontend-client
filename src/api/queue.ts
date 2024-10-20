@@ -2,7 +2,7 @@ import client from "@/lib/axios";
 
 export interface Ticket {
   department_id: string;
-  window: null;
+  windows: { name: string } | null;
   id: string;
   creation_time: string;
   start_time: null;
